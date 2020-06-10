@@ -6,6 +6,7 @@ import (
 	"errors"
 
 	"github.com/gin-gonic/gin"
+	"github.com/square/go-jose"
 	"github.com/square/go-jose/jwt"
 )
 
@@ -21,6 +22,21 @@ func NewJWTConfig() JWTConfig {
 	return JWTConfig{
 		Header: "Authorization",
 	}
+}
+
+func loadJSONWebKey(json []byte, pub bool) (*jose.JSONWebKey, error) {
+	var jwk jose.JSONWebKey
+	err := jwk.UnmarshalJSON(json)
+	if err != nil {
+		return nil, err
+	}
+	if !jwk.Valid() {
+		return nil, errors.New("invalid JWK key")
+	}
+	if jwk.IsPublic() != pub {
+		return nil, errors.New("priv/pub JWK key mismatch")
+	}
+	return &jwk, nil
 }
 
 func loadPublicKey(data []byte) (interface{}, error) {
@@ -42,7 +58,7 @@ func loadPublicKey(data []byte) (interface{}, error) {
 		return cert.PublicKey, nil
 	}
 
-	jwk, err2 := LoadJSONWebKey(data, true)
+	jwk, err2 := loadJSONWebKey(data, true)
 	if err2 == nil {
 		return jwk, nil
 	}
@@ -74,7 +90,7 @@ func loadPrivateKey(data []byte) (interface{}, error) {
 		return priv, nil
 	}
 
-	jwk, err3 := LoadJSONWebKey(input, false)
+	jwk, err3 := loadJSONWebKey(input, false)
 	if err3 == nil {
 		return jwk, nil
 	}
