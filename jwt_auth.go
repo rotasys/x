@@ -110,7 +110,7 @@ func (j *JWTConfig) Handler() gin.HandlerFunc {
 		}
 
 		out := make(map[string]interface{})
-		if err := tok.Claims(nil, &out); err != nil {
+		if err := tok.Claims(j.Key, &out); err != nil {
 			if j.FailedAuthHandler != nil {
 				j.FailedAuthHandler(c, err)
 				return
