@@ -1,4 +1,4 @@
-module github.com/rotasys/rotasys/src/x
+module github.com/rotasys/x
 
 go 1.14
 
