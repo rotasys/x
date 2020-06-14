@@ -52,4 +52,13 @@ func ErrRender(err error) render.Renderer {
 	}
 }
 
+func ErrInternalRequest(err error) render.Renderer {
+	return &ErrResponse{
+		Err:            err,
+		HTTPStatusCode: 500,
+		StatusText:     "Error processing request",
+		ErrorText:      err.Error(),
+	}
+}
+
 var ErrNotFound = &ErrResponse{HTTPStatusCode: 404, StatusText: "Resource not found."}
