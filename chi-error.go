@@ -30,7 +30,6 @@ type ErrResponse struct {
 
 func (e *ErrResponse) Render(w http.ResponseWriter, r *http.Request) error {
 	render.Status(r, e.HTTPStatusCode)
-	render.JSON(w, r, e)
 	return nil
 }
 
