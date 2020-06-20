@@ -61,3 +61,5 @@ func ErrInternalRequest(err error) render.Renderer {
 }
 
 var ErrNotFound = &ErrResponse{HTTPStatusCode: 404, StatusText: "Resource not found."}
+
+var ErrBadRequest = &ErrResponse{HTTPStatusCode: 400, StatusText: "Bad request."}
